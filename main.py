@@ -63,7 +63,11 @@ def countGrid(crossedGrid: list[int]) -> list[int] :
 def main() -> None :
     print("prog running...")
     led_rgb(Color.WHITE, brightness=255)
+    for i in range(0,10):
+        
+    head_zero = mq_heading()
     grid = 0
+    
     
     while True:
         #Move()
