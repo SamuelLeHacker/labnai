@@ -46,12 +46,19 @@ def Move() -> None :
         sleep(10)
         token = False
 
-def countGrid() -> int :
-    if 110 <= line_sensor_data(1) <= 231 :
-        sleep(10)
-        return 1
-    else:
-        return 0
+def detectGrid(sensor: int) -> int :
+    if 90 <= line_sensor_data(sensor) <= 235 :
+        sleep(20)
+        return True
+    else :
+        return False
+    
+def countGrid(crossedGrid: list[int]) -> list[int] :
+    order: list[int]
+    if detectGrid(1) :
+        sleep(20)
+        if detectGrid(1) :
+            pass
         
 def main() -> None :
     print("prog running...")
@@ -59,9 +66,10 @@ def main() -> None :
     grid = 0
     
     while True:
-        Move()
-        grid += countGrid()
-        print(grid)
+        #Move()
+        #grid += countGrid()
+        #print(grid)
+        print("head:",mq_heading())
 
 if __name__ == "__main__" :
     main()
