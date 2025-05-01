@@ -1,6 +1,7 @@
-from maprincess import *
 from microbit import *
+from maprincess import *
 import utime
+import music
 
 """
    0   1   2
@@ -8,17 +9,22 @@ import utime
 3             4
 """
 
-SPEED = 20
-S_SPEED = 14
-SS_SPEED = 9
-is_stucked = 0
-is_super_stucked = 0
+SPEED: int = 20
+S_SPEED: int = 13
+SS_SPEED: int = 8
+
+TUNE_START = ["C6:1", "E", "G"]
+TUNE_POSITIVE = ["F5:1", "G"]
+TUNE_NEGATIVE = ["E4:1","C5","E3:1","C3:"]
+
+is_stucked: int = 0
+is_super_stucked: int = 0
+
 
 def Move() -> None :
     token: bool = True
     stoped: bool = False
     global is_stucked #when this variable reach X (8), the robot is concidered stucked
-    #global is_super_stucked
     
     if line_sensor_data(0) <= 60 and line_sensor_data(2) <= 60 and token == True :
         token = False
@@ -39,16 +45,6 @@ def Move() -> None :
         motor_run(Motor.RIGHT, -35)
         motor_run(Motor.LEFT, 20)
         sleep(800)
-        
-    '''
-    if is_super_stucked > 5 :
-        is_super_stucked = 0
-        print("STUUUUUUUCKED")
-        motor_run(Motor.RIGHT, -int(SPEED*1.5))
-        motor_run(Motor.LEFT, 0)
-        sleep(1200)
-        
-    '''
     
     if line_sensor_data(0) > 60 and line_sensor_data(2) <= 60  and  token == True :
         motor_run(Motor.LEFT, SPEED)
@@ -125,7 +121,7 @@ def setUpSpeed(totGrid: int):
     return totGrid / (utime.ticks_ms() - tick_zero)
 
         
-'''
+
 def getDir(head_zero: float) -> (int, float) :
     head: float = 0
     direction: int = 0
@@ -146,31 +142,111 @@ def getDir(head_zero: float) -> (int, float) :
         direction = 3
     
     return direction
-'''
+
 
         
 def main() -> None :
-    print("prog running...")
     
+    print("prog running...")
+    led_rgb(Color.GREEN, brightness=255)
+    music.play(TUNE_START)
+    
+    sleep(2000)
+    
+    led_rgb(Color.RED, brightness=255)
+    music.play(TUNE_NEGATIVE)
+    
+    heading_set_window_size(20)
+    head_zero = mq_heading()
+    
+    start: bool = False
+    initialization: list[bool] = [False, False]
+    
+    while initialization != [True, True]:
+        led_rgb(Color.RED, brightness=255)
+    
+        if button_a.was_pressed() :
+            ''' setting up the speed '''
+            realSpeed: float = setUpSpeed(5)
+            grid: int = 0
+            
+            print("robot speed initialized")
+            initialization[0] = True
+            led_rgb(Color.GREEN, brightness=255)
+            music.play(TUNE_POSITIVE)
+            
+            
+        if button_b.was_pressed() :
+            ''' setting up the compass '''
+            compass.clear_calibration()
+            compass.calibrate()
+            
+            while button_b.was_pressed() != True :
+                pass
+                
+            heading_set_window_size(20)
+            head_zero = mq_heading()
+            print("robot is initially heading: ", head_zero)
+            
+            print("robot compass initialized.")
+            initialization[1] = True
+            led_rgb(Color.GREEN, brightness=255)
+            music.play(TUNE_POSITIVE)
+    
+    tick = utime.ticks_ms()
+    
+    while start != True :
+        if utime.ticks_ms() - tick > 10000 :
+            led_rgb(Color.RED, brightness=255)
+            music.play(TUNE_NEGATIVE)
+            led_rgb(Color.GREEN, brightness=255)
+            tick = utime.ticks_ms()
+        if button_a.was_pressed() or button_b.was_pressed() :
+            led_rgb(Color.GREEN, brightness=255)
+            music.play(TUNE_POSITIVE)
+            music.play(TUNE_POSITIVE)
+            sleep(500)
+            break
+    
+    
+    led_rgb(Color.RED, brightness=255)
+    music.play("C")
+    sleep(400)
+    
+    led_rgb_off()
+    sleep(100)
+    
+    led_rgb(Color.ORANGE, brightness=255)
+    music.play("C")
+    sleep(400)
+    
+    led_rgb_off()
+    sleep(100)
+    
+    led_rgb(Color.GREEN, brightness=255)
+    music.play("C")
+    sleep(400)
+    
+    led_rgb_off()
+    sleep(100)
+    
+    print("robot num 1 starts operating...")
     
     led_rgb(Color.WHITE, brightness=255)
-    realSpeed: float = setUpSpeed(5)
+    music.play("C6")
+    sleep(1000)
     
-    if button_a.was_pressed() :
-        
-        grid: int = 0
-        
-        while True :
-            Move()
-            #grid += countGrid()
-            #print(grid)
-            #print("head0:",mq_heading())
-            #print(getDir(head_zero))
-            sleep(50)
-        
-        motor_stop()
+    while True :
+        Move()
+        print(mq_heading() - head_zero)
+        #grid += countGrid()
+        #print(grid)
+        #print("head0:",mq_heading())
+        #print(getDir(head_zero))
+        sleep(50)
+    
+    motor_stop()
     
 
 if __name__ == "__main__" :
-    while True :
-        Move()
+    main()
