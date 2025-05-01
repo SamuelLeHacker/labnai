@@ -1,14 +1,17 @@
 from maprincess import *
 from microbit import *
+import utime
 
 """
    0   1   2
 
 3             4
 """
-SPEED = 19
+
+SPEED = 20
 S_SPEED = 18
 SS_SPEED = 13
+
 def Move() -> None :
     token: bool = True
     
@@ -46,12 +49,13 @@ def Move() -> None :
         sleep(10)
         token = False
 
-def detectGrid(sensor: int) -> int :
-    if 90 <= line_sensor_data(sensor) <= 235 :
-        sleep(20)
-        return True
+def detectGrid(sensor: int, slp: int) -> bool :
+    if 120 <= line_sensor_data(sensor) <= 236 :
+        sleep(slp)
+        print("GRID")
+        return 1
     else :
-        return False
+        return 0
     
 def countGrid(crossedGrid: list[int]) -> list[int] :
     order: list[int]
@@ -60,27 +64,90 @@ def countGrid(crossedGrid: list[int]) -> list[int] :
         if detectGrid(1) :
             pass
         
+def setUpSpeed():
+    global SPEED
+    gridCrossed: int = 0
+    totGrid: int = 5
+    tick_zero: int = utime.ticks_ms()
+    
+    localCount: list[int] = [0,0,0,1]
+    crossingMargin: int = utime.ticks_ms()
+    
+    while gridCrossed < totGrid :
+        if utime.ticks_ms() - crossingMargin > 150 :
+            crossingMargin = utime.ticks_ms()
+            localCount = [0,0,0,1]
+            print("reset")
+
+        localCount[0] = detectGrid(0,0)
+        localCount[1] = detectGrid(0,0)
+        localCount[2] = detectGrid(0,0)
+            
+        if localCount == [1,1,1,1] :
+            localCount[3] = 0
+            gridCrossed += 1
+            print("@@@@@@@grid num:", gridCrossed)
+            sleep(60)
+            
+        motor_run(Motor.ALL, SPEED)
+    
+    motor_stop()
+    
+    return utime.ticks_ms() - tick_zero
+
+        
+
+def getDir(head_zero: float) -> (int, float) :
+    head: float = 0
+    direction: int = 0
+    #error: float
+    
+    for i in range(0,5) :
+        head += mq_heading()
+    head = head / 5
+    print(head)
+
+    if (head_zero - 45) % 359 < head < (head_zero + 45) % 359 :
+        direction = 0
+    elif (head_zero + 45) % 359 < head < (head_zero + 135) % 359 :
+        direction = 1
+    elif (head_zero + 135) % 359 < head < (head_zero + 225) % 359 :
+        direction = 2
+    elif (head_zero + 225) % 359 < head < (head_zero + 315) % 359 :
+        direction = 3
+    
+    return direction
+
+        
 def main() -> None :
     print("prog running...")
+    
+    
+    
+    motor_stop()
     led_rgb(Color.WHITE, brightness=255)
-    for i in range(0,10):
-        
-    head_zero = mq_heading()
-    grid = 0
+     
+    head_zero: float = 0
+    grid: int = 0
     
+    for i in range(0,10) :
+        head_zero += mq_heading()
+    head_zero = head_zero / 10
     
-    while True:
-        #Move()
+    print(head_zero)
+    
+    while True :
+        Move()
         #grid += countGrid()
         #print(grid)
-        print("head:",mq_heading())
-
-if __name__ == "__main__" :
-    main()
-    """
-    while True :
-        print(line_sensor_data(0))
+        #print("head0:",mq_heading())
+        #print(getDir(head_zero))
         sleep(50)
     
-    """
-        
+    motor_stop()
+    
+
+if __name__ == "__main__" :
+    led_rgb(Color.WHITE, brightness=255)
+    motor_stop()
+    setUpSpeed()
