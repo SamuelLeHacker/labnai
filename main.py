@@ -121,32 +121,24 @@ def getDir(head_zero: float) -> (int, float) :
 def main() -> None :
     print("prog running...")
     
+    
+    led_rgb(Color.WHITE, brightness=255)
     realSpeed: float = setUpSpeed(5)
     
-    motor_stop()
-    led_rgb(Color.WHITE, brightness=255)
-     
-    head_zero: float = 0
-    grid: int = 0
-    
-    for i in range(0,10) :
-        head_zero += mq_heading()
-    head_zero = head_zero / 10
-    
-    print(head_zero)
-    
-    while True :
-        Move()
-        #grid += countGrid()
-        #print(grid)
-        #print("head0:",mq_heading())
-        #print(getDir(head_zero))
-        sleep(50)
-    
-    motor_stop()
+    if button_a.was_pressed() :
+        
+        grid: int = 0
+        
+        while True :
+            Move()
+            #grid += countGrid()
+            #print(grid)
+            #print("head0:",mq_heading())
+            #print(getDir(head_zero))
+            sleep(50)
+        
+        motor_stop()
     
 
 if __name__ == "__main__" :
-    led_rgb(Color.WHITE, brightness=255)
-    motor_stop()
-    setUpSpeed()
+    main()
