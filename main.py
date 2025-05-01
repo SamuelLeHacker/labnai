@@ -52,7 +52,6 @@ def Move() -> None :
 def detectGrid(sensor: int, slp: int) -> bool :
     if 120 <= line_sensor_data(sensor) <= 236 :
         sleep(slp)
-        print("GRID")
         return 1
     else :
         return 0
@@ -86,14 +85,14 @@ def setUpSpeed():
         if localCount == [1,1,1,1] :
             localCount[3] = 0
             gridCrossed += 1
-            print("@@@@@@@grid num:", gridCrossed)
+            print("grid num:", gridCrossed)
             sleep(60)
             
         motor_run(Motor.ALL, SPEED)
     
     motor_stop()
     
-    return utime.ticks_ms() - tick_zero
+    return totGrid / (utime.ticks_ms() - tick_zero)
 
         
 '''
@@ -123,7 +122,7 @@ def getDir(head_zero: float) -> (int, float) :
 def main() -> None :
     print("prog running...")
     
-    
+    realSpeed: float = 
     
     motor_stop()
     led_rgb(Color.WHITE, brightness=255)
