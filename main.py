@@ -63,10 +63,9 @@ def countGrid(crossedGrid: list[int]) -> list[int] :
         if detectGrid(1) :
             pass
         
-def setUpSpeed():
+def setUpSpeed(totGrid: int):
     global SPEED
     gridCrossed: int = 0
-    totGrid: int = 5
     tick_zero: int = utime.ticks_ms()
     
     localCount: list[int] = [0,0,0,1]
@@ -122,7 +121,7 @@ def getDir(head_zero: float) -> (int, float) :
 def main() -> None :
     print("prog running...")
     
-    realSpeed: float = 
+    realSpeed: float = setUpSpeed(5)
     
     motor_stop()
     led_rgb(Color.WHITE, brightness=255)
