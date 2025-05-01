@@ -9,33 +9,68 @@ import utime
 """
 
 SPEED = 20
-S_SPEED = 18
-SS_SPEED = 13
+S_SPEED = 14
+SS_SPEED = 9
+is_stucked = 0
+is_super_stucked = 0
 
 def Move() -> None :
     token: bool = True
+    stoped: bool = False
+    global is_stucked #when this variable reach X (8), the robot is concidered stucked
+    #global is_super_stucked
     
-    if line_sensor_data(0) > 60 and line_sensor_data(1) <= 60  and  token == True:
+    if line_sensor_data(0) <= 60 and line_sensor_data(2) <= 60 and token == True :
+        token = False
+        stoped = True
+        motor_stop()
+        sleep(10)
+        
+    if stoped == True :
+        is_stucked += 1
+        motor_run(Motor.ALL, -SPEED)
+        print("back:", is_stucked)
+        sleep(100)
+        
+    if is_stucked > 6 :
+        is_stucked = 0
+        #is_super_stucked += 1
+        print("STUUUUUUUCKED")
+        motor_run(Motor.RIGHT, -35)
+        motor_run(Motor.LEFT, 20)
+        sleep(800)
+        
+    '''
+    if is_super_stucked > 5 :
+        is_super_stucked = 0
+        print("STUUUUUUUCKED")
+        motor_run(Motor.RIGHT, -int(SPEED*1.5))
+        motor_run(Motor.LEFT, 0)
+        sleep(1200)
+        
+    '''
+    
+    if line_sensor_data(0) > 60 and line_sensor_data(2) <= 60  and  token == True :
+        motor_run(Motor.LEFT, SPEED)
+        motor_run(Motor.RIGHT, 0)
+        sleep(10)
+        token = False
+        
+    if line_sensor_data(2) > 60 and line_sensor_data(0) <= 60 and token == True :
+        motor_run(Motor.RIGHT, SPEED)
+        motor_run(Motor.LEFT, 0)
+        sleep(10)
+        token = False
+        
+    if line_sensor_data(3) > 60 and line_sensor_data(4) <= 60  and token == True :
         motor_run(Motor.LEFT, SPEED)
         motor_run(Motor.RIGHT, S_SPEED)
         sleep(10)
         token = False
         
-    if line_sensor_data(2) > 60 and line_sensor_data(1) <= 60 and token == True:
+    if line_sensor_data(3) <= 60 and line_sensor_data(4) > 60 and token == True :
         motor_run(Motor.RIGHT, SPEED)
         motor_run(Motor.LEFT, S_SPEED)
-        sleep(10)
-        token = False
-        
-    if line_sensor_data(3) > 60 and line_sensor_data(4) <= 60  and token == True:
-        motor_run(Motor.LEFT, SPEED)
-        motor_run(Motor.RIGHT, SS_SPEED)
-        sleep(10)
-        token = False
-        
-    if line_sensor_data(3) <= 60 and line_sensor_data(4) > 60 and token == True:
-        motor_run(Motor.RIGHT, SPEED)
-        motor_run(Motor.LEFT, SS_SPEED)
         sleep(10)
         token = False
         
@@ -43,11 +78,7 @@ def Move() -> None :
         motor_run(Motor.ALL, SPEED)
         sleep(10)
         token = False
-        
-    if line_sensor_data(0) <= 60 and line_sensor_data(2) <= 60 and token == True:
-        motor_stop()
-        sleep(10)
-        token = False
+    
 
 def detectGrid(sensor: int, slp: int) -> bool :
     if 120 <= line_sensor_data(sensor) <= 236 :
@@ -141,4 +172,5 @@ def main() -> None :
     
 
 if __name__ == "__main__" :
-    main()
+    while True :
+        Move()
