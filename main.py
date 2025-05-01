@@ -96,7 +96,7 @@ def setUpSpeed():
     return utime.ticks_ms() - tick_zero
 
         
-
+'''
 def getDir(head_zero: float) -> (int, float) :
     head: float = 0
     direction: int = 0
@@ -117,6 +117,7 @@ def getDir(head_zero: float) -> (int, float) :
         direction = 3
     
     return direction
+'''
 
         
 def main() -> None :
