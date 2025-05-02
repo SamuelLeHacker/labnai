@@ -14,6 +14,7 @@ import music
 
 '''
 
+
 SPEED: int = 20
 S_SPEED: int = 13
 SS_SPEED: int = 8
@@ -24,6 +25,7 @@ TUNE_NEGATIVE = ["E4:1","C5","E3:1","C3:"]
 
 is_stucked: int = 0
 is_super_stucked: int = 0
+
 
 def Move() -> None :
     token: bool = True
@@ -87,12 +89,14 @@ def detectGrid(sensor: int, slp: int) -> bool :
     else :
         return 0
     
+    
 def countGrid(crossedGrid: list[int]) -> list[int] :
     order: list[int]
     if detectGrid(1) :
         sleep(20)
         if detectGrid(1) :
             pass
+        
         
 def setUpSpeed(totGrid: int):
     global SPEED
@@ -161,7 +165,6 @@ def setUpDirections() -> list[float] :
     
     return head_zero
 
-        
 
 def getDir(head_zero: float) -> (int, float) :
     head: float = 0
@@ -183,7 +186,6 @@ def getDir(head_zero: float) -> (int, float) :
         direction = 3
     
     return direction
-
 
         
 def main() -> None :
@@ -242,7 +244,6 @@ def main() -> None :
             music.play(TUNE_POSITIVE)
             sleep(500)
             break
-    
     
     led_rgb(Color.RED, brightness=255)
     music.play("C")
