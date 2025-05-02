@@ -261,6 +261,7 @@ def mq_heading():
  mag_raw=(compass.get_x(),compass.get_z(),-compass.get_y())
  acc_norm=sqrt(acc_raw[0]*acc_raw[0]+acc_raw[1]*acc_raw[1]+acc_raw[2]*acc_raw[2])
  try:
+  print(".")
   acc_x_norm=acc_raw[0]/acc_norm
   acc_y_norm=acc_raw[1]/acc_norm
   pitch=asin(acc_x_norm)

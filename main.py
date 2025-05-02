@@ -156,11 +156,12 @@ def main() -> None :
     led_rgb(Color.RED, brightness=255)
     music.play(TUNE_NEGATIVE)
     
-    heading_set_window_size(20)
-    head_zero = mq_heading()
+    #heading_set_window_size(20)
+    
+    head_zero: float = [4] #front, back, left, right
     
     start: bool = False
-    initialization: list[bool] = [False, False]
+    initialization: list[bool] = [True, False]
     
     while initialization != [True, True]:
         led_rgb(Color.RED, brightness=255)
@@ -183,9 +184,20 @@ def main() -> None :
             
             while button_b.was_pressed() != True :
                 pass
-                
-            heading_set_window_size(20)
-            head_zero = mq_heading()
+            head_zero[0] = mq_heading()
+            
+            while button_b.was_pressed() != True :
+                pass
+            head_zero[1] = mq_heading()
+            
+            while button_b.was_pressed() != True :
+                pass
+            head_zero[2] = mq_heading()
+            
+            while button_b.was_pressed() != True :
+                pass
+            head_zero[3] = mq_heading()
+            
             print("robot is initially heading: ", head_zero)
             
             print("robot compass initialized.")
@@ -236,14 +248,11 @@ def main() -> None :
     music.play("C6")
     sleep(1000)
     
+    i = 0
+    head = 0
+    
     while True :
-        Move()
-        print(mq_heading() - head_zero)
-        #grid += countGrid()
-        #print(grid)
-        #print("head0:",mq_heading())
-        #print(getDir(head_zero))
-        sleep(50)
+        head
     
     motor_stop()
     
