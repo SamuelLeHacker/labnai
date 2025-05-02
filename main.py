@@ -3,11 +3,16 @@ from maprincess import *
 import utime
 import music
 
-"""
-   0   1   2
+'''
+### Infrared Sensor Layout ###
 
-3             4
-"""
+           0  1  2
+           
+
+    3                    4
+   
+
+'''
 
 SPEED: int = 20
 S_SPEED: int = 13
