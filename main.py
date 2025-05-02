@@ -166,24 +166,16 @@ def setUpDirections() -> list[float] :
     return head_zero
 
 
-def getDir(head_zero: float) -> (int, float) :
-    head: float = 0
-    direction: int = 0
-    #error: float
+def getDirection(head_zero: float) -> (int, float) :
+    direction: int
+    head_now: float = mq_heading()
+    head_dist: list[float] = [0, 0, 0, 0]
     
-    for i in range(0,5) :
-        head += mq_heading()
-    head = head / 5
-    print(head)
-
-    if (head_zero - 45) % 359 < head < (head_zero + 45) % 359 :
-        direction = 0
-    elif (head_zero + 45) % 359 < head < (head_zero + 135) % 359 :
-        direction = 1
-    elif (head_zero + 135) % 359 < head < (head_zero + 225) % 359 :
-        direction = 2
-    elif (head_zero + 225) % 359 < head < (head_zero + 315) % 359 :
-        direction = 3
+    for i in range(0,4) :
+        head_dist[i] = abs(head_zero[i] - head_now)
+        
+    #print("diff:",head_dist)
+    direction = head_dist.index(min(head_dist))
     
     return direction
 
@@ -191,7 +183,7 @@ def getDir(head_zero: float) -> (int, float) :
 def main() -> None :
     grid: int
     realSpeed: float
-    head_zero: list[float] #front, back, left, right
+    head_zero: list[float] #front, right, back, left
     
     start: bool = False
     initialization: list[bool] = [True, False]
@@ -272,16 +264,8 @@ def main() -> None :
     music.play("C6")
     sleep(1000)
     
-    i = 0
-    head = 0
-    head_dist: list[float] = [0,0,0,0]
-    
     while True :
-        head = mq_heading()
-        for i in range(0,4) :
-            head_dist[i] = abs(head_zero[i] - head)
-        print(head_dist)
-        print(head_dist.index(min(head_dist)))
+        print(getDirection(head_zero))
         sleep(100)
             
     
