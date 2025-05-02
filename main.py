@@ -168,6 +168,8 @@ def setUpDirections() -> list[float] :
 
 def getDirection(head_zero: float) -> (int, float) :
     direction: int
+    intensity: float
+    
     head_now: float = mq_heading()
     head_dist: list[float] = [0, 0, 0, 0]
     
@@ -177,7 +179,14 @@ def getDirection(head_zero: float) -> (int, float) :
     #print("diff:",head_dist)
     direction = head_dist.index(min(head_dist))
     
-    return direction
+    if head_now <= head_zero[direction] :
+        intensity = head_now / head_zero[direction]
+    elif head_now > head_zero[direction] :
+        intensity = (head_now / head_zero[direction]) -2
+    
+    return direction, intensity
+
+def changeDirection()
 
         
 def main() -> None :
