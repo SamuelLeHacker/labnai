@@ -3,6 +3,7 @@ from maprincess import *
 import utime
 import music
 
+
 '''
 ### Infrared Sensor Layout ###
 
@@ -15,7 +16,7 @@ import music
 '''
 
 
-SPEED: int = 20
+SPEED: int = 40
 S_SPEED: int = 13
 SS_SPEED: int = 8
 
@@ -133,8 +134,8 @@ def setUpDirections() -> list[float] :
     
     head_zero: list[float] = [0, 0, 0, 0]
     
-    compass.clear_calibration()
-    compass.calibrate()
+#     compass.clear_calibration()
+#     compass.calibrate()
     
     while button_b.was_pressed() != True :
         pass
@@ -175,8 +176,7 @@ def getDirection(head_zero: float) -> (int, float) :
     
     for i in range(0,4) :
         head_dist[i] = abs(head_zero[i] - head_now)
-        
-    #print("diff:",head_dist)
+
     direction = head_dist.index(min(head_dist))
     
     if head_now <= head_zero[direction] :
@@ -186,19 +186,37 @@ def getDirection(head_zero: float) -> (int, float) :
     
     return direction, intensity
 
-def changeDirection()
+
+#def changeDirection(head_zero:list[int], dir: list[int,float], new_dir: int) -> None :
+
+def adjustDirection(direction: list[int, float]) -> None :
+    if direction[1] < 0 :
+        motor_run(Motor.LEFT, SPEED)
+        motor_run(Motor.RIGHT, -SPEED)
+        print("turn LEFT")
+        sleep(150)
+    
+    elif direction[1] > 0 :
+        motor_run(Motor.LEFT, -SPEED)
+        motor_run(Motor.RIGHT, SPEED)
+        print("turn RIGHT")
+        sleep(150)
+    
+    motor_stop()
 
         
 def main() -> None :
     grid: int
     realSpeed: float
     head_zero: list[float] #front, right, back, left
+    direction: list[int,float] #heading, intensity
     
     start: bool = False
     initialization: list[bool] = [True, False]
     
     print("prog running...")
-    
+        
+    motor_stop()
     led_rgb(Color.GREEN, brightness=255)
     music.play(TUNE_START)
     sleep(2000)
@@ -274,8 +292,10 @@ def main() -> None :
     sleep(1000)
     
     while True :
-        print(getDirection(head_zero))
-        sleep(100)
+        direction = getDirection(head_zero)
+        print(direction)
+        adjustDirection(direction)
+        sleep(500)
             
     
     motor_stop()
