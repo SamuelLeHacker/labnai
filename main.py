@@ -20,7 +20,6 @@ TUNE_NEGATIVE = ["E4:1","C5","E3:1","C3:"]
 is_stucked: int = 0
 is_super_stucked: int = 0
 
-
 def Move() -> None :
     token: bool = True
     stoped: bool = False
@@ -120,6 +119,43 @@ def setUpSpeed(totGrid: int):
     
     return totGrid / (utime.ticks_ms() - tick_zero)
 
+
+def setUpDirections() -> list[float] :
+    
+    head_zero: list[float] = [0, 0, 0, 0]
+    
+    compass.clear_calibration()
+    compass.calibrate()
+    
+    while button_b.was_pressed() != True :
+        pass
+    head_zero[0] = mq_heading()
+    led_rgb(Color.BLUE, brightness=255)
+    music.play("C6")
+    led_rgb(Color.RED, brightness=255)
+    
+    while button_b.was_pressed() != True :
+        pass
+    head_zero[1] = mq_heading()
+    led_rgb(Color.BLUE, brightness=255)
+    music.play("C6")
+    led_rgb(Color.RED, brightness=255)
+    
+    while button_b.was_pressed() != True :
+        pass
+    head_zero[2] = mq_heading()
+    led_rgb(Color.BLUE, brightness=255)
+    music.play("C6")
+    led_rgb(Color.RED, brightness=255)
+    
+    while button_b.was_pressed() != True :
+        pass
+    head_zero[3] = mq_heading()
+    led_rgb(Color.BLUE, brightness=255)
+    music.play("C6")
+    
+    return head_zero
+
         
 
 def getDir(head_zero: float) -> (int, float) :
@@ -146,32 +182,31 @@ def getDir(head_zero: float) -> (int, float) :
 
         
 def main() -> None :
-    
-    print("prog running...")
-    led_rgb(Color.GREEN, brightness=255)
-    music.play(TUNE_START)
-    
-    sleep(2000)
-    
-    led_rgb(Color.RED, brightness=255)
-    music.play(TUNE_NEGATIVE)
-    
-    #heading_set_window_size(20)
-    
-    head_zero: float = [4] #front, back, left, right
+    grid: int
+    realSpeed: float
+    head_zero: list[float] #front, back, left, right
     
     start: bool = False
     initialization: list[bool] = [True, False]
+    
+    print("prog running...")
+    
+    led_rgb(Color.GREEN, brightness=255)
+    music.play(TUNE_START)
+    sleep(2000)
+    led_rgb(Color.RED, brightness=255)
+    music.play(TUNE_NEGATIVE)    
     
     while initialization != [True, True]:
         led_rgb(Color.RED, brightness=255)
     
         if button_a.was_pressed() :
             ''' setting up the speed '''
-            realSpeed: float = setUpSpeed(5)
-            grid: int = 0
+            realSpeed = setUpSpeed(5)
+            grid = 0
             
             print("robot speed initialized")
+            
             initialization[0] = True
             led_rgb(Color.GREEN, brightness=255)
             music.play(TUNE_POSITIVE)
@@ -179,28 +214,11 @@ def main() -> None :
             
         if button_b.was_pressed() :
             ''' setting up the compass '''
-            compass.clear_calibration()
-            compass.calibrate()
-            
-            while button_b.was_pressed() != True :
-                pass
-            head_zero[0] = mq_heading()
-            
-            while button_b.was_pressed() != True :
-                pass
-            head_zero[1] = mq_heading()
-            
-            while button_b.was_pressed() != True :
-                pass
-            head_zero[2] = mq_heading()
-            
-            while button_b.was_pressed() != True :
-                pass
-            head_zero[3] = mq_heading()
+            head_zero = setUpDirections()
             
             print("robot is initially heading: ", head_zero)
-            
             print("robot compass initialized.")
+            
             initialization[1] = True
             led_rgb(Color.GREEN, brightness=255)
             music.play(TUNE_POSITIVE)
@@ -208,7 +226,7 @@ def main() -> None :
     tick = utime.ticks_ms()
     
     while start != True :
-        if utime.ticks_ms() - tick > 10000 :
+        if utime.ticks_ms() - tick > 6000 :
             led_rgb(Color.RED, brightness=255)
             music.play(TUNE_NEGATIVE)
             led_rgb(Color.GREEN, brightness=255)
@@ -250,9 +268,16 @@ def main() -> None :
     
     i = 0
     head = 0
+    head_dist: list[float] = [0,0,0,0]
     
     while True :
-        head
+        head = mq_heading()
+        for i in range(0,4) :
+            head_dist[i] = abs(head_zero[i] - head)
+        print(head_dist)
+        print(head_dist.index(min(head_dist)))
+        sleep(100)
+            
     
     motor_stop()
     
