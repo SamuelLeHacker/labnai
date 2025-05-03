@@ -345,13 +345,3 @@ def main() -> None :
 
 if __name__ == "__main__" :
     main()
-    '''
-    while True :
-        comp = 0
-        for i in range(0,30):
-            comp += compass.heading()
-            sleep(5)
-        comp = int(comp / 30)
-        print(comp)
-        sleep(100)
-    '''
