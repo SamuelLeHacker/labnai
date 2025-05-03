@@ -134,8 +134,8 @@ def setUpDirections() -> list[float] :
     
     head_zero: list[float] = [0, 0, 0, 0]
     
-    compass.clear_calibration()
-    compass.calibrate()
+    #compass.clear_calibration()
+    #compass.calibrate()
     
     while button_b.was_pressed() != True :
         pass
@@ -174,10 +174,10 @@ def getDirection(head_zero: float) -> (int, float) :
     head_now: float = 0#= mq_heading()
     head_dist: list[float] = [0, 0, 0, 0]
     
-    for i in range(0,20) :
+    for i in range(0,40) :
         head_now += mq_heading()
         sleep(2)
-    head_now = head_now / 20
+    head_now = head_now / 40
     
     for i in range(0,4) :
         head_dist[i] = abs(head_zero[i] - head_now)
@@ -192,8 +192,26 @@ def getDirection(head_zero: float) -> (int, float) :
     return direction, intensity
 
 
-#def changeDirection(head_zero:list[int], dir: list[int,float], new_dir: int) -> None :
+def changeDirection(head_zero: list[int], head: list[int,float], head_new: int) -> None :
+    head_diff: int = head_new - head[0]
+    if abs(head_diff) >= 3 :
+        head_diff = (head_diff//abs(head_diff)) * -1
+    
+    print(head_diff)
+    
+    if head_diff >= 0 :
+        motor_run(Motor.LEFT, SPEED)
+        motor_run(Motor.RIGHT, -SPEED)
+        sleep(720 * abs(head_diff))
+        motor_stop()
+        
+    elif head_diff < 0 :
+        motor_run(Motor.LEFT, -SPEED)
+        motor_run(Motor.RIGHT, SPEED)
+        sleep(720 * abs(head_diff))
+        motor_stop()
 
+            
 def adjustDirection(direction: list[int, float], slp: int) -> None :
     if direction[1] < 0 :
         motor_run(Motor.LEFT, SPEED)
@@ -257,6 +275,7 @@ def main() -> None :
             music.play(TUNE_POSITIVE)
     
     tick = utime.ticks_ms()
+    print(head_zero)
     
     while start != True :
         if utime.ticks_ms() - tick > 6000 :
@@ -304,16 +323,21 @@ def main() -> None :
             for i in range(0,10) :
                 direction = getDirection(head_zero)
                 print(direction)
-                adjustDirection(direction, 70)
+                adjustDirection(direction, 80)
                 sleep(100)
             sleep(200)
-            for i in range(0,10) :
+            for i in range(0,20) :
                 direction = getDirection(head_zero)
                 print(direction)
                 adjustDirection(direction, 25)
-                sleep(100)
+                sleep(50)
                 
-        sleep(700)
+        if button_a.was_pressed() :
+            sleep(500)
+            direction = getDirection(head_zero)
+            changeDirection(head_zero, direction, (direction[0] + 2)%4)
+            
+        sleep(100)
             
     
     motor_stop()
@@ -321,3 +345,13 @@ def main() -> None :
 
 if __name__ == "__main__" :
     main()
+    '''
+    while True :
+        comp = 0
+        for i in range(0,30):
+            comp += compass.heading()
+            sleep(5)
+        comp = int(comp / 30)
+        print(comp)
+        sleep(100)
+    '''
