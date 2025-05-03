@@ -216,8 +216,10 @@ def main() -> None :
     head_zero: list[float] #front, right, back, left
     direction: list[int,float] #heading, intensity
     
-    start: bool = False
+    '''states variables'''
     initialization: list[bool] = [True, False]
+    start: bool = False
+    forward: bool = False
     
     print("prog running...")
         
@@ -298,6 +300,7 @@ def main() -> None :
     
     while True :
         if button_b.was_pressed() :
+            
             for i in range(0,10) :
                 direction = getDirection(head_zero)
                 print(direction)
@@ -309,6 +312,7 @@ def main() -> None :
                 print(direction)
                 adjustDirection(direction, 25)
                 sleep(100)
+                
         sleep(700)
             
     
