@@ -142,54 +142,69 @@ def setUpDirections() -> list[float] :
     #compass.clear_calibration()
     #compass.calibrate()
     
+    '''---------- head 0 ----------'''
+    
     while button_b.was_pressed() != True :
         pass
     while i < 10 :
         received = radio.receive()
-        if received[0:4] != last_id :
+        if received != None and received[0:5] != last_id :
+            print(received)
             head_zero[0] += received[6:]
             last_id = received[0:5]
     i = 0
     head_zero[0] = head_zero[0] / 10
+
     led_rgb(Color.BLUE, brightness=255)
     music.play("C6")
     led_rgb(Color.RED, brightness=255)
+    
+    '''---------- head 1 ----------'''
     
     while button_b.was_pressed() != True :
         pass
     while i < 10 :
         received = radio.receive()
-        if received[0:4] != last_id :
+        if received != None and received[0:5] != last_id :
+            print(received)
             head_zero[1] += received[6:]
             last_id = received[0:5]
     i = 0
     head_zero[1] = head_zero[1] / 10
+    
     led_rgb(Color.BLUE, brightness=255)
     music.play("C6")
     led_rgb(Color.RED, brightness=255)
+    
+    '''---------- head 2 ----------'''
     
     while button_b.was_pressed() != True :
         pass
     while i < 10 :
         received = radio.receive()
-        if received[0:4] != last_id :
+        if received != None and received[0:5] != last_id :
+            print(received)
             head_zero[2] += received[6:]
             last_id = received[0:5]
     i = 0
     head_zero[2] = head_zero[2] / 10
+    
     led_rgb(Color.BLUE, brightness=255)
     music.play("C6")
     led_rgb(Color.RED, brightness=255)
+    
+    '''---------- head 4 ----------'''
     
     while button_b.was_pressed() != True :
         pass
     while i < 10 :
         received = radio.receive()
-        if received[0:4] != last_id :
+        if received != None and received[0:5] != last_id :
+            print(received)
             head_zero[3] += received[6:]
             last_id = received[0:5]
-    i = 0
     head_zero[3] = head_zero[3] / 10
+    
     led_rgb(Color.BLUE, brightness=255)
     music.play("C6")
     
