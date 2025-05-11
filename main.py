@@ -2,6 +2,7 @@ from microbit import *
 from maprincess import *
 import utime
 import music
+import radio
 
 
 '''
