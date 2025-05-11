@@ -148,7 +148,7 @@ def setUpDirections() -> list[float] :
         pass
     while i < 10 :
         received = radio.receive()
-        if received != None and received[0:5] != last_id :
+        if received != None and received[0:5] != str(last_id) :
             print(received)
             head_zero[0] += received[6:]
             last_id = received[0:5]
@@ -165,7 +165,7 @@ def setUpDirections() -> list[float] :
         pass
     while i < 10 :
         received = radio.receive()
-        if received != None and received[0:5] != last_id :
+        if received != None and received[0:5] != str(last_id) :
             print(received)
             head_zero[1] += received[6:]
             last_id = received[0:5]
@@ -182,7 +182,7 @@ def setUpDirections() -> list[float] :
         pass
     while i < 10 :
         received = radio.receive()
-        if received != None and received[0:5] != last_id :
+        if received != None and received[0:5] != str(last_id) :
             print(received)
             head_zero[2] += received[6:]
             last_id = received[0:5]
@@ -199,7 +199,7 @@ def setUpDirections() -> list[float] :
         pass
     while i < 10 :
         received = radio.receive()
-        if received != None and received[0:5] != last_id :
+        if received != None and received[0:5] != str(last_id) :
             print(received)
             head_zero[3] += received[6:]
             last_id = received[0:5]
