@@ -42,22 +42,22 @@ def setUpDirections():
 	while button_b.was_pressed()!=_A:0
 	while i<10:
 		received=radio.receive()
-		if received!=A and received[0:5]!=last_id:print(received);head_zero[0]+=received[6:];last_id=received[0:5]
+		if received!=A and received[0:5]!=str(last_id):print(received);head_zero[0]+=received[6:];last_id=received[0:5]
 	i=0;head_zero[0]=head_zero[0]/10;led_rgb(Color.BLUE,brightness=255);music.play(_C);led_rgb(Color.RED,brightness=255)
 	while button_b.was_pressed()!=_A:0
 	while i<10:
 		received=radio.receive()
-		if received!=A and received[0:5]!=last_id:print(received);head_zero[1]+=received[6:];last_id=received[0:5]
+		if received!=A and received[0:5]!=str(last_id):print(received);head_zero[1]+=received[6:];last_id=received[0:5]
 	i=0;head_zero[1]=head_zero[1]/10;led_rgb(Color.BLUE,brightness=255);music.play(_C);led_rgb(Color.RED,brightness=255)
 	while button_b.was_pressed()!=_A:0
 	while i<10:
 		received=radio.receive()
-		if received!=A and received[0:5]!=last_id:print(received);head_zero[2]+=received[6:];last_id=received[0:5]
+		if received!=A and received[0:5]!=str(last_id):print(received);head_zero[2]+=received[6:];last_id=received[0:5]
 	i=0;head_zero[2]=head_zero[2]/10;led_rgb(Color.BLUE,brightness=255);music.play(_C);led_rgb(Color.RED,brightness=255)
 	while button_b.was_pressed()!=_A:0
 	while i<10:
 		received=radio.receive()
-		if received!=A and received[0:5]!=last_id:print(received);head_zero[3]+=received[6:];last_id=received[0:5]
+		if received!=A and received[0:5]!=str(last_id):print(received);head_zero[3]+=received[6:];last_id=received[0:5]
 	head_zero[3]=head_zero[3]/10;led_rgb(Color.BLUE,brightness=255);music.play(_C);return head_zero
 def getDirection(head_zero):
 	direction:0;intensity:0;head_now=0;head_dist=[0,0,0,0]

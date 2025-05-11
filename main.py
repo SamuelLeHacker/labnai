@@ -132,6 +132,7 @@ def setUpSpeed(totGrid: int):
 
 
 def setUpDirections() -> list[float] :
+    print("entered")
     
     i: int = 0
     last_id: int = 0
@@ -146,12 +147,15 @@ def setUpDirections() -> list[float] :
     
     while button_b.was_pressed() != True :
         pass
+    print("entered")
     while i < 10 :
+        print("entered")
         received = radio.receive()
         if received != None and received[0:5] != str(last_id) :
             print(received)
-            head_zero[0] += received[6:]
+            head_zero[0] += eval(received[6:])
             last_id = received[0:5]
+            i += 1
     i = 0
     head_zero[0] = head_zero[0] / 10
 
@@ -167,8 +171,9 @@ def setUpDirections() -> list[float] :
         received = radio.receive()
         if received != None and received[0:5] != str(last_id) :
             print(received)
-            head_zero[1] += received[6:]
+            head_zero[1] += eval(received[6:])
             last_id = received[0:5]
+            i += 1
     i = 0
     head_zero[1] = head_zero[1] / 10
     
@@ -184,8 +189,9 @@ def setUpDirections() -> list[float] :
         received = radio.receive()
         if received != None and received[0:5] != str(last_id) :
             print(received)
-            head_zero[2] += received[6:]
+            head_zero[2] += eval(received[6:])
             last_id = received[0:5]
+            i += 1
     i = 0
     head_zero[2] = head_zero[2] / 10
     
@@ -201,8 +207,10 @@ def setUpDirections() -> list[float] :
         received = radio.receive()
         if received != None and received[0:5] != str(last_id) :
             print(received)
-            head_zero[3] += received[6:]
+            head_zero[3] += eval(received[6:])
             last_id = received[0:5]
+            i += 1
+            
     head_zero[3] = head_zero[3] / 10
     
     led_rgb(Color.BLUE, brightness=255)
