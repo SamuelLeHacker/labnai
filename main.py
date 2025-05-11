@@ -133,6 +133,10 @@ def setUpSpeed(totGrid: int):
 
 def setUpDirections() -> list[float] :
     
+    i: int = 0
+    last_id: int = 0
+    recieved: str
+    
     head_zero: list[float] = [0, 0, 0, 0]
     
     #compass.clear_calibration()
@@ -140,28 +144,52 @@ def setUpDirections() -> list[float] :
     
     while button_b.was_pressed() != True :
         pass
-    head_zero[0] = mq_heading()
+    while i < 10 :
+        received = radio.receive()
+        if received[0:4] != last_id :
+            head_zero[0] += received[6:]
+            last_id = received[0:5]
+    i = 0
+    head_zero[0] = head_zero[0] / 10
     led_rgb(Color.BLUE, brightness=255)
     music.play("C6")
     led_rgb(Color.RED, brightness=255)
     
     while button_b.was_pressed() != True :
         pass
-    head_zero[1] = mq_heading()
+    while i < 10 :
+        received = radio.receive()
+        if received[0:4] != last_id :
+            head_zero[1] += received[6:]
+            last_id = received[0:5]
+    i = 0
+    head_zero[1] = head_zero[1] / 10
     led_rgb(Color.BLUE, brightness=255)
     music.play("C6")
     led_rgb(Color.RED, brightness=255)
     
     while button_b.was_pressed() != True :
         pass
-    head_zero[2] = mq_heading()
+    while i < 10 :
+        received = radio.receive()
+        if received[0:4] != last_id :
+            head_zero[2] += received[6:]
+            last_id = received[0:5]
+    i = 0
+    head_zero[2] = head_zero[2] / 10
     led_rgb(Color.BLUE, brightness=255)
     music.play("C6")
     led_rgb(Color.RED, brightness=255)
     
     while button_b.was_pressed() != True :
         pass
-    head_zero[3] = mq_heading()
+    while i < 10 :
+        received = radio.receive()
+        if received[0:4] != last_id :
+            head_zero[3] += received[6:]
+            last_id = received[0:5]
+    i = 0
+    head_zero[3] = head_zero[3] / 10
     led_rgb(Color.BLUE, brightness=255)
     music.play("C6")
     
@@ -241,6 +269,8 @@ def main() -> None :
     forward: bool = False
     
     print("prog running...")
+    
+    radio.on()
         
     motor_stop()
     led_rgb(Color.GREEN, brightness=255)
