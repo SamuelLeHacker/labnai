@@ -82,6 +82,10 @@ def Move() -> None :
         motor_run(Motor.ALL, SPEED)
         sleep(10)
         token = False
+        
+
+def JustFollowRightWall() -> None :
+    
     
 
 def detectGrid(sensor: int, slp: int) -> bool :
@@ -286,12 +290,14 @@ def main() -> None :
     head_zero: list[float] #front, right, back, left
     direction: list[int,float] #heading, intensity
     
-    '''states variables'''
-    initialization: list[bool] = [True, False]
+    option: int = 0 #case1: resolve maze, case:2 follow wall
     start: bool = False
+    initialization: list[bool] = [True, False]
     forward: bool = False
     
     print("prog running...")
+    
+    '''============ Initialization ============'''
     
     radio.on()
         
@@ -370,6 +376,8 @@ def main() -> None :
     led_rgb(Color.WHITE, brightness=255)
     music.play("C6")
     sleep(1000)
+    
+    '''============ Main Loop ============'''
     
     while True :
         if button_b.was_pressed() :
