@@ -412,37 +412,36 @@ def main() -> None :
     music.play("C6")
     sleep(1000)
     
-    match option :
-        case 1 :
-            while True : #for testing
-                if button_b.was_pressed() :#might need to put it directly inside the function.
-                    
-                    for i in range(0,10) :
-                        direction = getDirection(head_zero)
-                        print(direction)
-                        adjustDirection(direction, 80)
-                        sleep(100)
-                    sleep(200)
-                    for i in range(0,20) :
-                        direction = getDirection(head_zero)
-                        print(direction)
-                        adjustDirection(direction, 25)
-                        sleep(50)
-                        
-                if button_a.was_pressed() :
-                    sleep(500)
-                    direction = getDirection(head_zero)
-                    changeDirection(head_zero, direction, (direction[0] + 2)%4)
-                    
-                sleep(100)
-        
-        case 2 :
-            while True :
-                JustFollowRightLine()
-                sleep(10)
+    if option == 1 :
+        while True : #for testing
+            if button_b.was_pressed() :#might need to put it directly inside the function.
                 
-        case 0 :
-            return -1
+                for i in range(0,10) :
+                    direction = getDirection(head_zero)
+                    print(direction)
+                    adjustDirection(direction, 80)
+                    sleep(100)
+                sleep(200)
+                for i in range(0,20) :
+                    direction = getDirection(head_zero)
+                    print(direction)
+                    adjustDirection(direction, 25)
+                    sleep(50)
+                    
+            if button_a.was_pressed() :
+                sleep(500)
+                direction = getDirection(head_zero)
+                changeDirection(head_zero, direction, (direction[0] + 2)%4)
+                
+            sleep(100)
+    
+    elif == 2 :
+        while True :
+            JustFollowRightLine()
+            sleep(10)
+            
+    elif == 0 :
+        return -1
             
             
     motor_stop()
