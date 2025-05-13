@@ -343,12 +343,18 @@ def main() -> None :
             music.play(TUNE_NEGATIVE)
             led_rgb(Color.GREEN, brightness=255)
             tick = utime.ticks_ms()
-        if button_a.was_pressed() or button_b.was_pressed() :
-            led_rgb(Color.GREEN, brightness=255)
-            music.play(TUNE_POSITIVE)
-            music.play(TUNE_POSITIVE)
-            sleep(500)
+            
+        if button_a.was_pressed() :
+            
             break
+        
+        elif button_b.was_pressed() :
+            break
+        
+    led_rgb(Color.GREEN, brightness=255)
+    music.play(TUNE_POSITIVE)
+    music.play(TUNE_POSITIVE)
+    sleep(600)
     
     led_rgb(Color.RED, brightness=255)
     music.play("C")
@@ -377,31 +383,41 @@ def main() -> None :
     music.play("C6")
     sleep(1000)
     
-    '''============ Main Loop ============'''
+    '''============ Main Loops ============'''
     
-    while True :
-        if button_b.was_pressed() :
-            
-            for i in range(0,10) :
-                direction = getDirection(head_zero)
-                print(direction)
-                adjustDirection(direction, 80)
+    match option :
+        case 1 :
+            while True : #for testing
+                if button_b.was_pressed() :
+                    
+                    for i in range(0,10) :
+                        direction = getDirection(head_zero)
+                        print(direction)
+                        adjustDirection(direction, 80)
+                        sleep(100)
+                    sleep(200)
+                    for i in range(0,20) :
+                        direction = getDirection(head_zero)
+                        print(direction)
+                        adjustDirection(direction, 25)
+                        sleep(50)
+                        
+                if button_a.was_pressed() :
+                    sleep(500)
+                    direction = getDirection(head_zero)
+                    changeDirection(head_zero, direction, (direction[0] + 2)%4)
+                    
                 sleep(100)
-            sleep(200)
-            for i in range(0,20) :
-                direction = getDirection(head_zero)
-                print(direction)
-                adjustDirection(direction, 25)
-                sleep(50)
+        
+        case 2 :
+            while True :
+                JustFollowRightLine()
+                sleep(10)
                 
-        if button_a.was_pressed() :
-            sleep(500)
-            direction = getDirection(head_zero)
-            changeDirection(head_zero, direction, (direction[0] + 2)%4)
+        case 0 :
+            return -1
             
-        sleep(100)
             
-    
     motor_stop()
     
 
