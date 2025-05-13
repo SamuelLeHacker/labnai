@@ -8,10 +8,10 @@ import radio
 '''
 ### Infrared Sensor Layout ###
 
-           0  1  2
+           2  1  0
            
 
-    3                    4
+    4                    3
    
 
 '''
@@ -61,8 +61,8 @@ def Move() -> None :
         token = False
         
     if line_sensor_data(2) > 60 and line_sensor_data(0) <= 60 and token == True :
-        motor_run(Motor.RIGHT, SPEED)
         motor_run(Motor.LEFT, 0)
+        motor_run(Motor.RIGHT, SPEED)
         sleep(10)
         token = False
         
@@ -85,27 +85,27 @@ def Move() -> None :
         
 
 def JustFollowRightWall() -> None :
-    if line_sensor_data(4) > 60 :
+    if line_sensor_data(3) > 60  :
         motor_run(Motor.RIGHT, 0)
-        motor_run(Motor.LEFT, SPPED)
+        motor_run(Motor.LEFT, SPEED)
         sleep(10)
         
-    elif line_sensor_data(4) <= 60 and line_sensor_data(0) > 60 :
+    if  line_sensor_data(2) <= 60 :
         motor_run(Motor.RIGHT, SPEED)
         motor_run(Motor.LEFT, 0)
         sleep(10)
         
-    elif line_sensor_data(4) <= 60 and line_sensor_data(1) > 60 :
+    elif line_sensor_data(1) <= 60 :
         motor_run(Motor.RIGHT, SPEED)
         motor_run(Motor.LEFT, S_SPEED)
         sleep(10)
     
-    elif line_sensor_data(4) <= 60 and line_sensor_data(2) > 60 :
+    elif line_sensor_data(0) <= 60 :
         motor_run(Motor.RIGHT, SPEED)
         motor_run(Motor.LEFT, S_SPEED)
         sleep(10)
         
-    elif line_sensor_data(4) <= 60 and line_sensor_data(2) > 60 :
+    elif line_sensor_data(3) <= 60 :
         motor_run(Motor.ALL, SPEED)
         sleep(10)
     
@@ -435,12 +435,12 @@ def main() -> None :
                 
             sleep(100)
     
-    elif == 2 :
+    elif option == 2 :
         while True :
             JustFollowRightLine()
             sleep(10)
             
-    elif == 0 :
+    elif option == 0 :
         return -1
             
             
@@ -449,7 +449,9 @@ def main() -> None :
 
 if __name__ == "__main__" :
     #main()
-    
+    motor_stop()
+    led_rgb(Color.WHITE, brightness=255)
     while True :
         JustFollowRightWall()
+        print(line_sensor_data(3))
         sleep(5)
