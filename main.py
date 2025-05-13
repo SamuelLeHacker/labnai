@@ -292,12 +292,12 @@ def main() -> None :
     
     option: int = 0 #case1: resolve maze, case:2 follow wall
     start: bool = False
-    initialization: list[bool] = [True, False]
+    initialization: list[bool] = [False, False]
     forward: bool = False
     
     print("prog running...")
     
-    '''============ Initialization ============'''
+    '''============= Initialization ============='''
     
     radio.on()
         
@@ -312,7 +312,7 @@ def main() -> None :
         led_rgb(Color.RED, brightness=255)
     
         if button_a.was_pressed() :
-            ''' setting up the speed '''
+            '''----- setting up the speed -----'''
             realSpeed = setUpSpeed(5)
             grid = 0
             
@@ -324,7 +324,7 @@ def main() -> None :
             
             
         if button_b.was_pressed() :
-            ''' setting up the compass '''
+            '''----- setting up the compass -----'''
             head_zero = setUpDirections()
             
             print("robot is initially heading: ", head_zero)
@@ -334,8 +334,11 @@ def main() -> None :
             led_rgb(Color.GREEN, brightness=255)
             music.play(TUNE_POSITIVE)
     
-    tick = utime.ticks_ms()
     print(head_zero)
+    
+    '''============= Choose Option ============='''
+    
+    tick = utime.ticks_ms()
     
     while start != True :
         if utime.ticks_ms() - tick > 6000 :
@@ -345,10 +348,11 @@ def main() -> None :
             tick = utime.ticks_ms()
             
         if button_a.was_pressed() :
-            
+            option = 1
             break
         
         elif button_b.was_pressed() :
+            option = 2
             break
         
     led_rgb(Color.GREEN, brightness=255)
@@ -377,13 +381,14 @@ def main() -> None :
     led_rgb_off()
     sleep(100)
     
+    
+    '''============= Main Loops ============='''
+    
     print("robot num 1 starts operating...")
     
     led_rgb(Color.WHITE, brightness=255)
     music.play("C6")
     sleep(1000)
-    
-    '''============ Main Loops ============'''
     
     match option :
         case 1 :
