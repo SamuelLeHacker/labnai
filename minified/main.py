@@ -15,12 +15,18 @@ is_super_stucked=0
 def Move():
 	token=_A;stoped=_B;global is_stucked
 	if line_sensor_data(0)<=60 and line_sensor_data(2)<=60 and token==_A:token=_B;stoped=_A;motor_stop();sleep(10)
-	if is_stucked>6:is_stucked=0;print('STUUUUUUUCKED');motor_run(Motor.RIGHT,-35);motor_run(Motor.LEFT,20);sleep(800)
+	if is_stucked>6:is_stucked=0;print('STUUUUUUUCK');motor_run(Motor.RIGHT,-35);motor_run(Motor.LEFT,20);sleep(800)
 	if line_sensor_data(0)>60 and line_sensor_data(2)<=60 and token==_A:motor_run(Motor.LEFT,SPEED);motor_run(Motor.RIGHT,0);sleep(10);token=_B
 	if line_sensor_data(2)>60 and line_sensor_data(0)<=60 and token==_A:motor_run(Motor.RIGHT,SPEED);motor_run(Motor.LEFT,0);sleep(10);token=_B
 	if line_sensor_data(3)>60 and line_sensor_data(4)<=60 and token==_A:motor_run(Motor.LEFT,SPEED);motor_run(Motor.RIGHT,S_SPEED);sleep(10);token=_B
 	if line_sensor_data(3)<=60 and line_sensor_data(4)>60 and token==_A:motor_run(Motor.RIGHT,SPEED);motor_run(Motor.LEFT,S_SPEED);sleep(10);token=_B
 	if line_sensor_data(0)>60 and line_sensor_data(2)>60 and token==_A:motor_run(Motor.ALL,SPEED);sleep(10);token=_B
+def JustFollowRightWall():
+	if line_sensor_data(4)>60:motor_run(Motor.RIGHT,0);motor_run(Motor.LEFT,SPPED);sleep(10)
+	elif line_sensor_data(4)<=60 and line_sensor_data(0)>60:motor_run(Motor.RIGHT,SPEED);motor_run(Motor.LEFT,0);sleep(10)
+	elif line_sensor_data(4)<=60 and line_sensor_data(1)>60:motor_run(Motor.RIGHT,SPEED);motor_run(Motor.LEFT,S_SPEED);sleep(10)
+	elif line_sensor_data(4)<=60 and line_sensor_data(2)>60:motor_run(Motor.RIGHT,SPEED);motor_run(Motor.LEFT,S_SPEED);sleep(10)
+	elif line_sensor_data(4)<=60 and line_sensor_data(2)>60:motor_run(Motor.ALL,SPEED);sleep(10)
 def detectGrid(sensor,slp):
 	if 120<=line_sensor_data(sensor)<=236:sleep(slp);return 1
 	else:return 0
@@ -38,26 +44,27 @@ def setUpSpeed(totGrid):
 		motor_run(Motor.ALL,SPEED)
 	motor_stop();return totGrid/(utime.ticks_ms()-tick_zero)
 def setUpDirections():
-	A=None;i=0;last_id=0;recieved:0;head_zero=[0,0,0,0]
+	B='entered';A=None;print(B);i=0;last_id=0;recieved:0;head_zero=[0,0,0,0]
 	while button_b.was_pressed()!=_A:0
+	print(B)
 	while i<10:
-		received=radio.receive()
-		if received!=A and received[0:5]!=str(last_id):print(received);head_zero[0]+=received[6:];last_id=received[0:5]
+		print(B);received=radio.receive()
+		if received!=A and received[0:5]!=str(last_id):print(received);head_zero[0]+=eval(received[6:]);last_id=received[0:5];i+=1
 	i=0;head_zero[0]=head_zero[0]/10;led_rgb(Color.BLUE,brightness=255);music.play(_C);led_rgb(Color.RED,brightness=255)
 	while button_b.was_pressed()!=_A:0
 	while i<10:
 		received=radio.receive()
-		if received!=A and received[0:5]!=str(last_id):print(received);head_zero[1]+=received[6:];last_id=received[0:5]
+		if received!=A and received[0:5]!=str(last_id):print(received);head_zero[1]+=eval(received[6:]);last_id=received[0:5];i+=1
 	i=0;head_zero[1]=head_zero[1]/10;led_rgb(Color.BLUE,brightness=255);music.play(_C);led_rgb(Color.RED,brightness=255)
 	while button_b.was_pressed()!=_A:0
 	while i<10:
 		received=radio.receive()
-		if received!=A and received[0:5]!=str(last_id):print(received);head_zero[2]+=received[6:];last_id=received[0:5]
+		if received!=A and received[0:5]!=str(last_id):print(received);head_zero[2]+=eval(received[6:]);last_id=received[0:5];i+=1
 	i=0;head_zero[2]=head_zero[2]/10;led_rgb(Color.BLUE,brightness=255);music.play(_C);led_rgb(Color.RED,brightness=255)
 	while button_b.was_pressed()!=_A:0
 	while i<10:
 		received=radio.receive()
-		if received!=A and received[0:5]!=str(last_id):print(received);head_zero[3]+=received[6:];last_id=received[0:5]
+		if received!=A and received[0:5]!=str(last_id):print(received);head_zero[3]+=eval(received[6:]);last_id=received[0:5];i+=1
 	head_zero[3]=head_zero[3]/10;led_rgb(Color.BLUE,brightness=255);music.play(_C);return head_zero
 def getDirection(head_zero):
 	direction:0;intensity:0;head_now=0;head_dist=[0,0,0,0]
@@ -79,22 +86,29 @@ def adjustDirection(direction,slp):
 	elif direction[1]>0:motor_run(Motor.LEFT,-SPEED);motor_run(Motor.RIGHT,SPEED);print('turn RIGHT');sleep(slp)
 	motor_stop()
 def main():
-	A='C';grid:0;realSpeed:0;head_zero:0;direction:0;initialization=[_A,_B];start=_B;forward=_B;print('prog running...');radio.on();motor_stop();led_rgb(Color.GREEN,brightness=255);music.play(TUNE_START);sleep(2000);led_rgb(Color.RED,brightness=255);music.play(TUNE_NEGATIVE)
+	A='C';grid:0;realSpeed:0;head_zero:0;direction:0;option=0;start=_B;initialization=[_B,_B];forward=_B;print('prog running...');radio.on();motor_stop();led_rgb(Color.GREEN,brightness=255);music.play(TUNE_START);sleep(2000);led_rgb(Color.RED,brightness=255);music.play(TUNE_NEGATIVE)
 	while initialization!=[_A,_A]:
 		led_rgb(Color.RED,brightness=255)
 		if button_a.was_pressed():realSpeed=setUpSpeed(5);grid=0;print('robot speed initialized');initialization[0]=_A;led_rgb(Color.GREEN,brightness=255);music.play(TUNE_POSITIVE)
 		if button_b.was_pressed():head_zero=setUpDirections();print('robot is initially heading: ',head_zero);print('robot compass initialized.');initialization[1]=_A;led_rgb(Color.GREEN,brightness=255);music.play(TUNE_POSITIVE)
-	tick=utime.ticks_ms();print(head_zero)
+	print(head_zero);tick=utime.ticks_ms()
 	while start!=_A:
 		if utime.ticks_ms()-tick>6000:led_rgb(Color.RED,brightness=255);music.play(TUNE_NEGATIVE);led_rgb(Color.GREEN,brightness=255);tick=utime.ticks_ms()
-		if button_a.was_pressed()or button_b.was_pressed():led_rgb(Color.GREEN,brightness=255);music.play(TUNE_POSITIVE);music.play(TUNE_POSITIVE);sleep(500);break
-	led_rgb(Color.RED,brightness=255);music.play(A);sleep(400);led_rgb_off();sleep(100);led_rgb(Color.ORANGE,brightness=255);music.play(A);sleep(400);led_rgb_off();sleep(100);led_rgb(Color.GREEN,brightness=255);music.play(A);sleep(400);led_rgb_off();sleep(100);print('robot num 1 starts operating...');led_rgb(Color.WHITE,brightness=255);music.play(_C);sleep(1000)
-	while _A:
-		if button_b.was_pressed():
-			for i in range(0,10):direction=getDirection(head_zero);print(direction);adjustDirection(direction,80);sleep(100)
-			sleep(200)
-			for i in range(0,20):direction=getDirection(head_zero);print(direction);adjustDirection(direction,25);sleep(50)
-		if button_a.was_pressed():sleep(500);direction=getDirection(head_zero);changeDirection(head_zero,direction,(direction[0]+2)%4)
-		sleep(100)
+		if button_a.was_pressed():option=1;break
+		elif button_b.was_pressed():option=2;break
+	led_rgb(Color.GREEN,brightness=255);music.play(TUNE_POSITIVE);music.play(TUNE_POSITIVE);sleep(600);led_rgb(Color.RED,brightness=255);music.play(A);sleep(400);led_rgb_off();sleep(100);led_rgb(Color.ORANGE,brightness=255);music.play(A);sleep(400);led_rgb_off();sleep(100);led_rgb(Color.GREEN,brightness=255);music.play(A);sleep(400);led_rgb_off();sleep(100);print('robot num 1 starts operating...');led_rgb(Color.WHITE,brightness=255);music.play(_C);sleep(1000)
+	match option:
+		case 1:
+			while _A:
+				if button_b.was_pressed():
+					for i in range(0,10):direction=getDirection(head_zero);print(direction);adjustDirection(direction,80);sleep(100)
+					sleep(200)
+					for i in range(0,20):direction=getDirection(head_zero);print(direction);adjustDirection(direction,25);sleep(50)
+				if button_a.was_pressed():sleep(500);direction=getDirection(head_zero);changeDirection(head_zero,direction,(direction[0]+2)%4)
+				sleep(100)
+		case 2:
+			while _A:JustFollowRightLine();sleep(10)
+		case 0:return-1
 	motor_stop()
-if __name__=='__main__':main()
+if __name__=='__main__':
+	while _A:JustFollowRightWall();sleep(5)

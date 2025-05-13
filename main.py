@@ -49,7 +49,7 @@ def Move() -> None :
     if is_stucked > 6 :
         is_stucked = 0
         #is_super_stucked += 1
-        print("STUUUUUUUCKED")
+        print("STUUUUUUUCK")
         motor_run(Motor.RIGHT, -35)
         motor_run(Motor.LEFT, 20)
         sleep(800)
@@ -85,7 +85,29 @@ def Move() -> None :
         
 
 def JustFollowRightWall() -> None :
+    if line_sensor_data(4) > 60 :
+        motor_run(Motor.RIGHT, 0)
+        motor_run(Motor.LEFT, SPPED)
+        sleep(10)
+        
+    elif line_sensor_data(4) <= 60 and line_sensor_data(0) > 60 :
+        motor_run(Motor.RIGHT, SPEED)
+        motor_run(Motor.LEFT, 0)
+        sleep(10)
+        
+    elif line_sensor_data(4) <= 60 and line_sensor_data(1) > 60 :
+        motor_run(Motor.RIGHT, SPEED)
+        motor_run(Motor.LEFT, S_SPEED)
+        sleep(10)
     
+    elif line_sensor_data(4) <= 60 and line_sensor_data(2) > 60 :
+        motor_run(Motor.RIGHT, SPEED)
+        motor_run(Motor.LEFT, S_SPEED)
+        sleep(10)
+        
+    elif line_sensor_data(4) <= 60 and line_sensor_data(2) > 60 :
+        motor_run(Motor.ALL, SPEED)
+        sleep(10)
     
 
 def detectGrid(sensor: int, slp: int) -> bool :
@@ -393,7 +415,7 @@ def main() -> None :
     match option :
         case 1 :
             while True : #for testing
-                if button_b.was_pressed() :
+                if button_b.was_pressed() :#might need to put it directly inside the function.
                     
                     for i in range(0,10) :
                         direction = getDirection(head_zero)
@@ -427,4 +449,8 @@ def main() -> None :
     
 
 if __name__ == "__main__" :
-    main()
+    #main()
+    
+    while True :
+        JustFollowRightWall()
+        sleep(5)
