@@ -448,10 +448,13 @@ def main() -> None :
     
 
 if __name__ == "__main__" :
-    #main()
+    main()
+    '''
     motor_stop()
     led_rgb(Color.WHITE, brightness=255)
     while True :
         JustFollowRightWall()
         print(line_sensor_data(3))
         sleep(5)
+        
+    '''
