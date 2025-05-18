@@ -104,9 +104,9 @@ def JustFollowRightWall() -> None :
     
     Out : None
     
-    Fonction : La fonction JustFollowRightWall est la fonction de mouvement principale de la second mode de resolution de labyrinthe.
-    Elle ajuste la position du robot pour que le capteur #3 soit toujours sur le mur qui est a sa droite, et les trois autres en dehors
-    de celle-ci.
+    Fonction : La fonction JustFollowRightWall est la fonction de mouvement principale de la second mode de resolution de
+    labyrinthe. Elle ajuste la position du robot pour que le capteur #3 soit toujours sur le mur qui est a sa droite, et
+    les trois autres en dehors de celle-ci.
     '''
         
     if line_sensor_data(2) <= 60 :
