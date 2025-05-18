@@ -340,6 +340,20 @@ def getDirection(head_zero: float) -> (int, float) :
 
 
 def changeDirection(head_zero: list[int], head: list[int,float], head_new: int) -> None :
+    '''
+    In : - head_zero: list -> liste des positions initiales mesuree en fonction des 4 points cardinaux du labyrinthe
+                              lors de la calibration du robot.
+                              
+         - head: list -> position actuelle du robot et l'erreur (en %) entre celle-ci et la position initiale la plus
+                         proche.
+        
+         - head_new: int -> nouvelle position du robot. Elle correspond a l'une des quatres position cardinal de celui
+                            -ci mesuree lors de l'initialisation de ce dernier.
+    
+    Out : None
+    
+    Fonction : La fonction changeDirection modifie la direction du robot afin de l'aligner a un nouvelle position head_new
+    '''
     head_diff: int = head_new - head[0]
     if abs(head_diff) >= 3 :
         head_diff = (head_diff//abs(head_diff)) * -1
