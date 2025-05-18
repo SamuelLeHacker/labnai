@@ -148,7 +148,7 @@ def detectGrid(sensor: int, slp: int) -> bool :
     Out : 1 (True) ou 0 (False)
     
     Fonction : Retourne 1 (True) si le detecteur renvoie une valeur comprise entre 120 et 256 (gris),
-    sinon renvoie 0 (False)
+    sinon renvoie 0 (False).
     '''
     
     if 120 <= line_sensor_data(sensor) <= 236 :
