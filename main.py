@@ -314,7 +314,23 @@ def setUpDirections() -> list[float] :
     return head_zero
 
 
-def getDirection(head_zero: float) -> (int, float) :
+def getDirection(head_zero: list[int]) -> (int, float) :
+    '''
+    In : - head_zero: list -> liste des orientations initiales mesuree selon des 4 points cardinaux du labyrinthe lors
+                              de la calibration du robot.
+    
+    Out : - direction: int -> direction cardinal la plus proche de l'orientation actuelle du robot.
+    
+          - intensity: float -> proximite (en %) de la distance entre l'orientation actuelle du robot et la direction
+                                cardinale initialement mesuree (head_zero[i]) la plus proche.
+                                
+    Fonction : Mesure pour chaque orientation initiale de head_zero, la difference avec l'orientation actuelle du robot. La
+    plus petite difference mesuree correspond a la direction dans laquelle pointe le nez du robot. Cette fonction renvoie
+    egalement un facteur d'intensite qui mesure la distance entre la valeur d'origine de l'orientation la plus prche et la
+    valeur de l'orientation actuelle. Le signe du facteur d'intesite est positif ou negatif en fonction de si le robot depasse
+    l'orientation initiale par la gauche ou par la droite.
+    '''
+    
     direction: int
     intensity: float
     
@@ -341,13 +357,13 @@ def getDirection(head_zero: float) -> (int, float) :
 
 def changeDirection(head_zero: list[int], head: list[int,float], head_new: int) -> None :
     '''
-    In : - head_zero: list -> liste des positions initiales mesuree en fonction des 4 points cardinaux du labyrinthe
-                              lors de la calibration du robot.
+    In : - head_zero: list -> liste des orientations initiales mesuree selon des 4 points cardinaux du labyrinthe lors
+                              de la calibration du robot.
                               
-         - head: list -> position actuelle du robot et l'erreur (en %) entre celle-ci et la position initiale la plus
+         - head: list -> position actuelle du robot et l'erreur (en %) entre celle-ci et l'orientations initiale la plus
                          proche.
         
-         - head_new: int -> nouvelle position du robot. Elle correspond a l'une des quatres position cardinal de celui
+         - head_new: int -> nouvelle orientations du robot. Elle correspond a l'une des quatres position cardinal de celui
                             -ci mesuree lors de l'initialisation de ce dernier.
     
     Out : None
