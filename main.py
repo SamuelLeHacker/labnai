@@ -134,16 +134,21 @@ def countGrid(crossedGrid: list[int]) -> list[int] :
         
 def setUpSpeed(totGrid: int):
     '''
-    In : - totGrid: int -> Nombre total de grilles sur lequel se fait la calibration du robot.
-                           (plus ce nombre est grand, plus la mesure de la vitesse est precise, et
-                           le risque que le robot devie aussi.) (5 semble etre un bon entre-deux)
+    In : - totGrid: int -> Nombre total de grilles sur lequel se fait la calibration du robot. (plus ce nombre
+                           est grand, plus la mesure de la vitesse est precise, et le risque que le robot devie
+                           aussi.) (5 semble etre un bon entre-deux)
                            
     Out : - gridSpeed: float -> Vitesse mesuree en grilles traversees par millisecondes, et sur laquelle on
                                 calibre le deuxieme robot, afin de calquer sa vitesse sur celle du premier.
                                 On s'assure ainsi que la vitesse ne depende ni du niveau de charge des piles
                                 ni de la puissance(peu precise) des moteurs.
                                 
-    Principe : Le robot avance tant qu'il n'a pas detecter totGrid
+    Principe : Le robot avance tant qu'il n'a pas detecter x (x=totGrid) grilles traversee. On prend une premiere
+    mesure du temps au debut de la fonction, puis une seconde a la fin. On calcule ensutie gridSpeed en divisant
+    le nombre total de grilles traversees par la difference des deux mesures initiale et finale du temps.
+    Pour s'assurer que l'on ne compte que les lignes perpendiculaire au mouvement du robot, la liste localCount
+    comprend 3 variables booléennes (= 1 si detectGrid == True). Pour compter une grille, il faut que les trois
+    variables associees aux capteur valent 1 dans un lapse de temps de 150ms.
     '''
     
     global SPEED
@@ -182,22 +187,29 @@ def setUpSpeed(totGrid: int):
 
 
 def setUpDirections() -> list[float] :
+    '''
+    In : None
+    
+    Out : - head_zero: list -> Liste des 4 points cardinaux du labyrinthe (haut, bas, gauche, droite) mesures.
+    
+    Fonction : On commence par calibrer la bousole avec la fonction microbit "calibrate()", puis on calcul
+    l'angle de head_zero[i] en faisant la moyenne de dix mesure compass.heading(). La mesure du heading est envoyee
+    depuis un microbit externe fixe au dessus du premier.
+    '''
     i: int = 0
     last_id: int = 0
     recieved: str
     
     head_zero: list[float] = [0, 0, 0, 0]
     
-    #compass.clear_calibration()
-    #compass.calibrate()
+    compass.clear_calibration()
+    compass.calibrate()
     
     '''---------- head 0 ----------'''
     
     while button_b.was_pressed() != True :
         pass
-    print("entered")
     while i < 10 :
-        print("entered")
         received = radio.receive()
         if received != None and received[0:5] != str(last_id) :
             print(received)
