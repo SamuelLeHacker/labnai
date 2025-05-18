@@ -16,7 +16,7 @@ import radio
 
 '''
 
-SUPER_SPEED = 120
+SUPER_SPEED = 90
 
 SPEED: int = 85
 S_SPEED: int = 79
@@ -111,29 +111,29 @@ def JustFollowRightWall() -> None :
     '''
         
     if line_sensor_data(2) <= 220 :
-        motor_run(Motor.LEFT, -SUPER_SPEED)
-        motor_run(Motor.RIGHT, SPEED)
-        sleep(2)
+        motor_run(Motor.LEFT, -SPEED)
+        motor_run(Motor.RIGHT, S_SPEED)
+        sleep(1)
         
     elif line_sensor_data(1) <= 220 :
-        motor_run(Motor.LEFT, -40) #0
+        motor_run(Motor.LEFT, -50)
         motor_run(Motor.RIGHT, SPEED)
-        sleep(2)
+        sleep(1)
     
     elif line_sensor_data(0) <= 220 :
-        motor_run(Motor.LEFT, -30) #int(SS_SPEED/2)
+        motor_run(Motor.LEFT, 0)
         motor_run(Motor.RIGHT, SPEED)
-        sleep(2)
+        sleep(1)
         
     elif line_sensor_data(3) > 220  :
         motor_run(Motor.RIGHT, -SS_SPEED)
         motor_run(Motor.LEFT, SPEED)
-        sleep(2)
+        sleep(1)
         
     elif line_sensor_data(3) <= 220 :
         motor_run(Motor.RIGHT, SUPER_SPEED-35)
         motor_run(Motor.LEFT, SUPER_SPEED)
-        sleep(2)
+        sleep(1)
     
 
 def detectGrid(sensor: int, slp: int) -> bool :
