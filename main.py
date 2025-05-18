@@ -553,7 +553,6 @@ def main() -> None :
     elif option == 2 :
         while True :
             JustFollowRightLine()
-            sleep(10)
             
     elif option == 0 :
         return -1
