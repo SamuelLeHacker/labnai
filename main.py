@@ -30,6 +30,20 @@ is_super_stucked: int = 0
 
 
 def Move() -> None :
+    '''
+    In : None
+    
+    Out : None
+    
+    Fonction : La fonction Move est la fonction de mouvement principale du premier mode de resolution de
+    labyrinthe initialement pensee une methode de resolution similaire a l'algorithme de Tremaux en s'aidant
+    de la bousole. Aussi, la fonction corrige la position du  robot si au moins un de ses capteur entre en
+    contacte avec un mur. Si le robot s'arrete plusieurs fois (6) d'affilées dans un court lapse de temps, il est
+    concidere comme etant "bloque" et corrige sa position.
+    La variable booleenne Token initialement =True s'assure que la fonction n'entre au plus que dans une seule
+    condition if par iteration.
+    '''
+    
     token: bool = True
     stoped: bool = False
     global is_stucked #when this variable reach X (8), the robot is concidered stucked
