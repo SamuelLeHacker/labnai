@@ -17,7 +17,7 @@ import radio
 '''
 
 
-SPEED: int = 30
+SPEED: int = 40
 S_SPEED: int = 13
 SS_SPEED: int = 8
 
@@ -79,35 +79,41 @@ def Move() -> None :
         token = False
         
     if line_sensor_data(0) > 60 and line_sensor_data(2) > 60 and token == True :
-        motor_run(Motor.ALL, SPEED)
+        motor_run(Motor.ALL, S_SPEED)
         sleep(10)
         token = False
         
 
 def JustFollowRightWall() -> None :
-    if line_sensor_data(3) > 60  :
-        motor_run(Motor.RIGHT, 0)
-        motor_run(Motor.LEFT, SPEED)
-        sleep(10)
         
-    if  line_sensor_data(2) <= 60 :
+    if line_sensor_data(2) <= 60 :
+        print("1")
         motor_run(Motor.RIGHT, SPEED)
         motor_run(Motor.LEFT, 0)
-        sleep(10)
+        sleep(100)
         
     elif line_sensor_data(1) <= 60 :
+        print("2")
         motor_run(Motor.RIGHT, SPEED)
-        motor_run(Motor.LEFT, S_SPEED)
-        sleep(10)
+        motor_run(Motor.LEFT, 0)
+        sleep(100)
     
     elif line_sensor_data(0) <= 60 :
+        print("3")
         motor_run(Motor.RIGHT, SPEED)
         motor_run(Motor.LEFT, S_SPEED)
-        sleep(10)
+        sleep(100)
+        
+    elif line_sensor_data(3) > 60  :
+        print("out")
+        motor_run(Motor.RIGHT, 0)
+        motor_run(Motor.LEFT, SPEED)
+        sleep(100)
         
     elif line_sensor_data(3) <= 60 :
+        print("forward")
         motor_run(Motor.ALL, SPEED)
-        sleep(10)
+        sleep(100)
     
 
 def detectGrid(sensor: int, slp: int) -> bool :
@@ -116,7 +122,8 @@ def detectGrid(sensor: int, slp: int) -> bool :
         return 1
     else :
         return 0
-    
+
+'''
     
 def countGrid(crossedGrid: list[int]) -> list[int] :
     order: list[int]
@@ -124,6 +131,8 @@ def countGrid(crossedGrid: list[int]) -> list[int] :
         sleep(20)
         if detectGrid(1) :
             pass
+            
+'''
         
         
 def setUpSpeed(totGrid: int):
@@ -291,19 +300,37 @@ def changeDirection(head_zero: list[int], head: list[int,float], head_new: int) 
 
             
 def adjustDirection(direction: list[int, float], slp: int) -> None :
-    if direction[1] < 0 :
-        motor_run(Motor.LEFT, SPEED)
-        motor_run(Motor.RIGHT, -SPEED)
-        print("turn LEFT")
-        sleep(slp)
+    '''
+    In : - direction -> liste des 4 direction actuelle du robot et leurs positions relative
+                        (en %) par rapport a la position head_zero (initiale) la plus proche.
+                        
+         - slp -> longueur du temps de pause durant lequel le robot tourne. Varie entre slp et
+                  2*slp entre le premier et le deuxieme ajustement.
+         
+    Out : None
     
-    elif direction[1] > 0 :
-        motor_run(Motor.LEFT, -SPEED)
-        motor_run(Motor.RIGHT, SPEED)
-        print("turn RIGHT")
-        sleep(slp)
-    
-    motor_stop()
+    Fonction : Ajuste la direction afin de l'alligner a la position head_zero (mesuree durant la
+    calibration du robot) la plus proche, pour s'assurer qu'il soit parallele a la grille afin de
+    faciliter le comptage des cases. L'ajustement s'effectue en deux tours: 1er ajustement en gros
+    et le second en precision.
+    '''
+    for i in range(1,3) :
+        for j in range(0,8) : 
+            if direction[1] < 0 :
+                motor_run(Motor.LEFT, SPEED)
+                motor_run(Motor.RIGHT, -SPEED)
+                print("turn LEFT")
+                sleep((1/i)*slp)
+            
+            elif direction[1] > 0 :
+                motor_run(Motor.LEFT, -SPEED)
+                motor_run(Motor.RIGHT, SPEED)
+                print("turn RIGHT")
+                sleep((1/i)*slp)
+            
+            motor_stop()
+        
+        sleep(200)
 
         
 def main() -> None :
@@ -448,8 +475,8 @@ def main() -> None :
     
 
 if __name__ == "__main__" :
-    main()
-    '''
+    #main()
+    
     motor_stop()
     led_rgb(Color.WHITE, brightness=255)
     while True :
@@ -457,4 +484,5 @@ if __name__ == "__main__" :
         print(line_sensor_data(3))
         sleep(5)
         
-    '''
+        
+    
