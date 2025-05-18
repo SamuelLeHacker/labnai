@@ -85,6 +85,14 @@ def Move() -> None :
         
 
 def JustFollowRightWall() -> None :
+    '''
+    In : None
+    
+    Out : None
+    
+    Fonction : La fonction JustFollowRightWall ajuste la position du robot pour que le capteur 3 soit
+    toujours sur un mur, et les trois autres en dehors de celle-ci.
+    '''
         
     if line_sensor_data(2) <= 60 :
         print("1")
