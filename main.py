@@ -125,6 +125,17 @@ def JustFollowRightWall() -> None :
     
 
 def detectGrid(sensor: int, slp: int) -> bool :
+    '''
+    In : - sensor: int -> Numero du detecteur infrarouge dont on veut retourner la mesure.
+    
+         - slp: int -> Temps de pause apres la mesure.
+         
+    Out : 1 (True) ou 0 (False)
+    
+    Fonction : Retourne 1 (True) si le detecteur renvoie une valeur comprise entre 120 et 256 (gris),
+    sinon renvoie 0 (False)
+    '''
+    
     if 120 <= line_sensor_data(sensor) <= 236 :
         sleep(slp)
         return 1
@@ -158,7 +169,7 @@ def setUpSpeed(totGrid: int):
     comprend 3 variables booléennes (= 1 si detectGrid == True). Pour compter une grille, il faut que les trois
     variables associees aux capteur valent 1 dans un lapse de temps de 150ms.
     '''
-    
+
     global SPEED
     gridSpeed: float
     tick_final: int
@@ -204,6 +215,7 @@ def setUpDirections() -> list[float] :
     l'angle de head_zero[i] en faisant la moyenne de dix mesure compass.heading(). La mesure du heading est
     envoyee depuis un microbit externe fixe au dessus du premier.
     '''
+    
     i: int = 0
     last_id: int = 0
     recieved: str
@@ -347,6 +359,7 @@ def adjustDirection(direction: list[int, float], slp: int) -> None :
     faciliter le comptage des cases. L'ajustement s'effectue en deux tours: 1er ajustement en gros
     et le second en precision.
     '''
+    
     for i in range(1,3) :
         for j in range(0,8) : 
             if direction[1] < 0 :
