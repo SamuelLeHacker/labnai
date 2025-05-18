@@ -16,10 +16,11 @@ import radio
 
 '''
 
+SUPER_SPEED = 120
 
-SPEED: int = 40
-S_SPEED: int = 13
-SS_SPEED: int = 8
+SPEED: int = 85
+S_SPEED: int = 79
+SS_SPEED: int = 70
 
 TUNE_START = ["C6:1", "E", "G"]
 TUNE_POSITIVE = ["F5:1", "G"]
@@ -109,34 +110,30 @@ def JustFollowRightWall() -> None :
     qui est a sa droite, et les trois autres en dehors de celle-ci.
     '''
         
-    if line_sensor_data(2) <= 60 :
-        print("1")
+    if line_sensor_data(2) <= 220 :
+        motor_run(Motor.LEFT, -SUPER_SPEED)
         motor_run(Motor.RIGHT, SPEED)
-        motor_run(Motor.LEFT, 0)
-        sleep(100)
+        sleep(2)
         
-    elif line_sensor_data(1) <= 60 :
-        print("2")
+    elif line_sensor_data(1) <= 220 :
+        motor_run(Motor.LEFT, -40) #0
         motor_run(Motor.RIGHT, SPEED)
-        motor_run(Motor.LEFT, 0)
-        sleep(100)
+        sleep(2)
     
-    elif line_sensor_data(0) <= 60 :
-        print("3")
+    elif line_sensor_data(0) <= 220 :
+        motor_run(Motor.LEFT, -30) #int(SS_SPEED/2)
         motor_run(Motor.RIGHT, SPEED)
-        motor_run(Motor.LEFT, S_SPEED)
-        sleep(100)
+        sleep(2)
         
-    elif line_sensor_data(3) > 60  :
-        print("out")
-        motor_run(Motor.RIGHT, 0)
+    elif line_sensor_data(3) > 220  :
+        motor_run(Motor.RIGHT, -SS_SPEED)
         motor_run(Motor.LEFT, SPEED)
-        sleep(100)
+        sleep(2)
         
-    elif line_sensor_data(3) <= 60 :
-        print("forward")
-        motor_run(Motor.ALL, SPEED)
-        sleep(100)
+    elif line_sensor_data(3) <= 220 :
+        motor_run(Motor.RIGHT, SUPER_SPEED-35)
+        motor_run(Motor.LEFT, SUPER_SPEED)
+        sleep(2)
     
 
 def detectGrid(sensor: int, slp: int) -> bool :
@@ -572,8 +569,6 @@ if __name__ == "__main__" :
     led_rgb(Color.WHITE, brightness=255)
     while True :
         JustFollowRightWall()
-        print(line_sensor_data(3))
-        sleep(5)
         
         
     
