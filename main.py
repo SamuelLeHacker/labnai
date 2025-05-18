@@ -563,12 +563,7 @@ def main() -> None :
     
 
 if __name__ == "__main__" :
-    #main()
-    
-    motor_stop()
-    led_rgb(Color.WHITE, brightness=255)
-    while True :
-        JustFollowRightWall()
+    main()
         
         
     
