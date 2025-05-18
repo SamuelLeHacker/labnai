@@ -193,8 +193,8 @@ def setUpDirections() -> list[float] :
     Out : - head_zero: list -> Liste des 4 points cardinaux du labyrinthe (haut, bas, gauche, droite) mesures.
     
     Fonction : On commence par calibrer la bousole avec la fonction microbit "calibrate()", puis on calcul
-    l'angle de head_zero[i] en faisant la moyenne de dix mesure compass.heading(). La mesure du heading est envoyee
-    depuis un microbit externe fixe au dessus du premier.
+    l'angle de head_zero[i] en faisant la moyenne de dix mesure compass.heading(). La mesure du heading est
+    envoyee depuis un microbit externe fixe au dessus du premier.
     '''
     i: int = 0
     last_id: int = 0
