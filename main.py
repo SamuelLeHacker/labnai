@@ -123,7 +123,6 @@ def detectGrid(sensor: int, slp: int) -> bool :
     else :
         return 0
 
-'''
     
 def countGrid(crossedGrid: list[int]) -> list[int] :
     order: list[int]
@@ -132,16 +131,29 @@ def countGrid(crossedGrid: list[int]) -> list[int] :
         if detectGrid(1) :
             pass
             
-'''
-        
         
 def setUpSpeed(totGrid: int):
+    '''
+    In : - totGrid: int -> Nombre total de grilles sur lequel se fait la calibration du robot.
+                           (plus ce nombre est grand, plus la mesure de la vitesse est precise, et
+                           le risque que le robot devie aussi.) (5 semble etre un bon entre-deux)
+                           
+    Out : - gridSpeed: float -> Vitesse mesuree en grilles traversees par millisecondes, et sur laquelle on
+                                calibre le deuxieme robot, afin de calquer sa vitesse sur celle du premier.
+                                On s'assure ainsi que la vitesse ne depende ni du niveau de charge des piles
+                                ni de la puissance(peu precise) des moteurs.
+                                
+    Principe : Le robot avance tant qu'il n'a pas detecter totGrid
+    '''
+    
     global SPEED
+    gridSpeed: float
+    tick_final: int
+    
     gridCrossed: int = 0
     tick_zero: int = utime.ticks_ms()
-    
-    localCount: list[int] = [0,0,0,1]
     crossingMargin: int = utime.ticks_ms()
+    localCount: list[int] = [0,0,0,1] #[capt1, capt2, capt3, 
     
     while gridCrossed < totGrid :
         if utime.ticks_ms() - crossingMargin > 150 :
@@ -161,14 +173,15 @@ def setUpSpeed(totGrid: int):
             
         motor_run(Motor.ALL, SPEED)
     
+    tick_final = utime.ticks_ms()
     motor_stop()
     
-    return totGrid / (utime.ticks_ms() - tick_zero)
+    gridSpeed = totGrid / (tick_final - tick_zero)
+    
+    return gridSpeed
 
 
 def setUpDirections() -> list[float] :
-    print("entered")
-    
     i: int = 0
     last_id: int = 0
     recieved: str
@@ -301,11 +314,11 @@ def changeDirection(head_zero: list[int], head: list[int,float], head_new: int) 
             
 def adjustDirection(direction: list[int, float], slp: int) -> None :
     '''
-    In : - direction -> liste des 4 direction actuelle du robot et leurs positions relative
-                        (en %) par rapport a la position head_zero (initiale) la plus proche.
+    In : - direction: list -> liste des 4 direction actuelle du robot et leurs positions relative
+                              (en %) par rapport a la position head_zero (initiale) la plus proche.
                         
-         - slp -> longueur du temps de pause durant lequel le robot tourne. Varie entre slp et
-                  2*slp entre le premier et le deuxieme ajustement.
+         - slp: int -> longueur du temps de pause durant lequel le robot tourne. Varie entre slp et
+                       2*slp entre le premier et le deuxieme ajustement.
          
     Out : None
     
